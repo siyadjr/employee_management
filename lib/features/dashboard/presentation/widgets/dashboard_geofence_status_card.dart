@@ -17,8 +17,12 @@ class DashboardGeofenceStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWithin = locationResult?.isWithinRange ?? (mode == LocationSimulationOption.atOffice);
-    final dist = locationResult?.distanceMeters ?? (mode == LocationSimulationOption.atOffice ? 15.0 : 350.0);
+    final isWithin =
+        locationResult?.isWithinRange ??
+        (mode == LocationSimulationOption.atOffice);
+    final dist =
+        locationResult?.distanceMeters ??
+        (mode == LocationSimulationOption.atOffice ? 15.0 : 350.0);
     final error = locationResult?.errorMessage;
 
     return Card(
@@ -34,19 +38,27 @@ class DashboardGeofenceStatusCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(
-                        isWithin ? Icons.location_on_rounded : Icons.location_off_rounded,
-                        color: isWithin ? Colors.green.shade700 : Colors.red.shade700,
+                        isWithin
+                            ? Icons.location_on_rounded
+                            : Icons.location_off_rounded,
+                        color: isWithin
+                            ? Colors.green.shade700
+                            : Colors.red.shade700,
                         size: 20,
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          isWithin ? 'Geofence: Inside (<200m)' : 'Geofence: Outside',
+                          isWithin
+                              ? 'Geofence:\nInside (<200m)'
+                              : 'Geofence:\nOutside',
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: TextStyle( 
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
-                            color: isWithin ? Colors.green.shade900 : Colors.red.shade900,
+                            color: isWithin
+                                ? Colors.green.shade900
+                                : Colors.red.shade900,
                           ),
                         ),
                       ),
@@ -68,12 +80,18 @@ class DashboardGeofenceStatusCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     TextButton.icon(
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         visualDensity: VisualDensity.compact,
                       ),
                       onPressed: onOpenReviewerSettings,
                       icon: const Icon(Icons.tune, size: 14),
-                      label: const Text('Simulate', style: TextStyle(fontSize: 12)),
+                      label: const Text(
+                        'Simulate',
+                        style: TextStyle(fontSize: 12),
+                      ),
                     ),
                   ],
                 ),
@@ -88,7 +106,11 @@ class DashboardGeofenceStatusCard extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 error,
-                style: TextStyle(fontSize: 11, color: Colors.red.shade700, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.red.shade700,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ],

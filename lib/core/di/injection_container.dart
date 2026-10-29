@@ -57,4 +57,9 @@ Future<void> initDependencies({
       () => WorkspaceConfigProvider(getIt<LocalStorageService>()),
     );
   }
+
+  // 7. Proactively request GPS location permission at app startup
+  //    This ensures the system dialog appears on first launch,
+  //    regardless of which simulation mode is active.
+  await getIt<LocationService>().requestPermissionIfNeeded();
 }

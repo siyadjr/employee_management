@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:geolocator/geolocator.dart';
 import 'package:employee_management/core/constants/app_constants.dart';
 import 'package:employee_management/core/storage/local_storage_service.dart';
+import 'package:flutter/foundation.dart';
 
 enum LocationSimulationOption {
   atOffice, // At office (< 20m)
@@ -29,6 +30,28 @@ class LocationService {
   final LocalStorageService _storage;
 
   LocationService(this._storage);
+
+  /// Call this once at startup to proactively request GPS permission
+  /// so the system dialog appears before the user tries to check in.
+  Future<void> requestPermissionIfNeeded() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        debugPrint('[LocationService] Location services disabled on device.');
+        return;
+      }
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        // This triggers the system permission dialog
+        permission = await Geolocator.requestPermission();
+        debugPrint('[LocationService] Permission after request: $permission');
+      } else {
+        debugPrint('[LocationService] Permission already: $permission');
+      }
+    } catch (e) {
+      debugPrint('[LocationService] Permission request error: $e');
+    }
+  }
 
   LocationSimulationOption get currentSimulationMode {
     final mode = _storage.getSimulationMode();
