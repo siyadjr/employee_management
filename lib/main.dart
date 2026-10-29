@@ -7,6 +7,7 @@ import 'package:employee_management/core/network/network_info.dart';
 import 'package:employee_management/core/storage/local_storage_service.dart';
 import 'package:employee_management/core/theme/app_theme.dart';
 import 'package:employee_management/core/utils/location_service.dart';
+import 'package:employee_management/core/di/injection_container.dart';
 import 'package:employee_management/features/attendance/data/sync_repository.dart';
 import 'package:employee_management/features/attendance/presentation/providers/attendance_provider.dart';
 import 'package:employee_management/features/dashboard/presentation/providers/dashboard_provider.dart';
@@ -15,44 +16,33 @@ import 'package:employee_management/features/settings/presentation/providers/wor
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final storage = await LocalStorageService.init();
-  final apiService = ApiService();
-  final networkInfo = NetworkInfo();
-  final locationService = LocationService(storage);
-
-  final syncRepository = SyncRepository(
-    apiService: apiService,
-    storage: storage,
-    networkInfo: networkInfo,
-  );
+  await initDependencies();
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: syncRepository),
-        ChangeNotifierProvider(
-          create: (_) => WorkspaceConfigProvider(storage),
-        ),
+        ChangeNotifierProvider.value(value: getIt<SyncRepository>()),
+        ChangeNotifierProvider.value(value: getIt<WorkspaceConfigProvider>()),
         ChangeNotifierProvider(
           create: (_) => DashboardProvider(
-            apiService: apiService,
-            storage: storage,
-            networkInfo: networkInfo,
-            syncRepo: syncRepository,
+            apiService: getIt<ApiService>(),
+            storage: getIt<LocalStorageService>(),
+            networkInfo: getIt<INetworkInfo>(),
+            syncRepo: getIt<SyncRepository>(),
           ),
         ),
         ChangeNotifierProvider(
           create: (_) => AttendanceProvider(
-            syncRepo: syncRepository,
-            locationService: locationService,
-            storage: storage,
+            syncRepo: getIt<SyncRepository>(),
+            locationService: getIt<LocationService>(),
+            storage: getIt<LocalStorageService>(),
           ),
         ),
         ChangeNotifierProvider(
           create: (_) => LeaveProvider(
-            apiService: apiService,
-            storage: storage,
-            networkInfo: networkInfo,
+            apiService: getIt<ApiService>(),
+            storage: getIt<LocalStorageService>(),
+            networkInfo: getIt<INetworkInfo>(),
           ),
         ),
       ],

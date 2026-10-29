@@ -41,6 +41,7 @@ dependencies:
   geolocator: ^14.0.1
   connectivity_plus: ^7.3.2
   http: ^1.6.0
+  get_it: ^9.3.0
 
 dev_dependencies:
   flutter_test:
