@@ -420,40 +420,45 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
               style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
             ),
             const Divider(height: 20),
-            ...MockNetworkScenario.values.map((sc) {
-              final isSelected = MockApiConfig.scenario == sc;
-              return RadioListTile<MockNetworkScenario>(
-                title: Text(_scenarioTitle(sc)),
-                value: sc,
-                groupValue: MockApiConfig.scenario,
-                selected: isSelected,
-                onChanged: (newSc) {
-                  if (newSc != null) {
-                    setState(() {
-                      MockApiConfig.setScenario(newSc);
-                    });
-                  }
-                },
-              );
-            }),
+            ValueListenableBuilder<MockNetworkScenario>(
+              valueListenable: MockApiConfig.notifier,
+              builder: (context, activeScenario, _) {
+                return Column(
+                  children: MockNetworkScenario.values.map((sc) {
+                    final isSelected = activeScenario == sc;
+                    return RadioListTile<MockNetworkScenario>(
+                      title: Text(
+                        MockApiConfig.getScenarioTitle(sc),
+                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                      ),
+                      subtitle: Text(
+                        MockApiConfig.getScenarioDescription(sc),
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                      ),
+                      value: sc,
+                      groupValue: activeScenario,
+                      selected: isSelected,
+                      onChanged: (newSc) {
+                        if (newSc != null) {
+                          MockApiConfig.setScenario(newSc);
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Switched to: ${MockApiConfig.getScenarioTitle(newSc)}'),
+                              duration: const Duration(seconds: 2),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  }).toList(),
+                );
+              },
+            ),
           ],
         ),
       ),
     );
-  }
-
-  String _scenarioTitle(MockNetworkScenario sc) {
-    switch (sc) {
-      case MockNetworkScenario.normal:
-        return 'Normal (200 OK)';
-      case MockNetworkScenario.slowNetwork:
-        return 'Timeout / Slow Network';
-      case MockNetworkScenario.serverError:
-        return 'Server Error (500 Internal Crash)';
-      case MockNetworkScenario.duplicateAttendanceConflict:
-        return 'Duplicate Attendance Conflict (409)';
-      case MockNetworkScenario.leaveValidationFailure:
-        return 'Leave Validation Rejection (422)';
-    }
   }
 }

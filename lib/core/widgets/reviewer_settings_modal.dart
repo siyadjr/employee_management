@@ -192,38 +192,37 @@ class _ReviewerSettingsModalState extends State<ReviewerSettingsModal> {
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
           ),
           const SizedBox(height: 8),
-          DropdownButtonFormField<MockNetworkScenario>(
-            initialValue: MockApiConfig.scenario,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
-            items: const [
-              DropdownMenuItem(
-                value: MockNetworkScenario.normal,
-                child: Text('Normal (200 OK)'),
-              ),
-              DropdownMenuItem(
-                value: MockNetworkScenario.slowNetwork,
-                child: Text('Timeout / Slow Network'),
-              ),
-              DropdownMenuItem(
-                value: MockNetworkScenario.serverError,
-                child: Text('Server Error (500)'),
-              ),
-              DropdownMenuItem(
-                value: MockNetworkScenario.duplicateAttendanceConflict,
-                child: Text('Duplicate Conflict (409)'),
-              ),
-              DropdownMenuItem(
-                value: MockNetworkScenario.leaveValidationFailure,
-                child: Text('Leave Validation Rejection (422)'),
-              ),
-            ],
-            onChanged: (sc) {
-              if (sc != null) {
-                _onNetworkScenarioChanged(sc);
-              }
+          ValueListenableBuilder<MockNetworkScenario>(
+            valueListenable: MockApiConfig.notifier,
+            builder: (context, activeScenario, _) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DropdownButtonFormField<MockNetworkScenario>(
+                    value: activeScenario,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    ),
+                    items: MockNetworkScenario.values.map((sc) {
+                      return DropdownMenuItem(
+                        value: sc,
+                        child: Text(MockApiConfig.getScenarioTitle(sc)),
+                      );
+                    }).toList(),
+                    onChanged: (sc) {
+                      if (sc != null) {
+                        _onNetworkScenarioChanged(sc);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    MockApiConfig.getScenarioDescription(activeScenario),
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+                  ),
+                ],
+              );
             },
           ),
           const SizedBox(height: 16),

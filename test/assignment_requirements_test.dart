@@ -10,7 +10,6 @@ import 'package:employee_management/core/utils/location_service.dart';
 import 'package:employee_management/features/attendance/data/sync_repository.dart';
 import 'package:employee_management/features/attendance/domain/models/attendance_event.dart';
 import 'package:employee_management/features/attendance/presentation/providers/attendance_provider.dart';
-import 'package:employee_management/features/leave/domain/models/leave_request.dart';
 import 'package:employee_management/features/leave/presentation/providers/leave_provider.dart';
 
 void main() {
