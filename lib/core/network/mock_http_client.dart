@@ -3,15 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:employee_management/core/network/mock_api_config.dart';
 
-/// A custom HTTP Client that intercepts requests matching REBS HRMS API endpoints
-/// and returns realistic responses, supporting scenarios like:
-/// - Success responses
-/// - Slow responses & timeouts
-/// - Server errors (500)
-/// - Duplicate attendance conflicts (409)
-/// - Leave validation rejections (422)
-/// It satisfies the requirement: "The Flutter app must use an HTTP client
-/// rather than returning hardcoded data directly from widgets."
 class MockHttpClient extends http.BaseClient {
   final http.Client _inner = http.Client();
 
@@ -25,7 +16,7 @@ class MockHttpClient extends http.BaseClient {
       'sickLeaveBalance': 6.0,
     },
     'office_location': {
-      'name': 'REBS Tech HQ',
+      'name': 'Tech HQ',
       'latitude': 10.028282,
       'longitude': 76.336596,
       'radiusMeters': 200.0,
