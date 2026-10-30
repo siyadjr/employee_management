@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/features/employee/domain/models/employee.dart';
 
 class EmployeeHeaderCard extends StatelessWidget {
@@ -26,7 +27,7 @@ class EmployeeHeaderCard extends StatelessWidget {
                   child: Text(
                     employee.name.split(' ').map((e) => e[0]).take(2).join(),
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -47,9 +48,9 @@ class EmployeeHeaderCard extends StatelessWidget {
                       const SizedBox(height: 3),
                       Text(
                         '${employee.id} • ${employee.department}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 13,
-                          color: Colors.grey.shade600,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -60,8 +61,8 @@ class EmployeeHeaderCard extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: isOffline
-                        ? Colors.orange.shade100
-                        : Colors.green.shade100,
+                        ? AppColors.warningLight
+                        : AppColors.successLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -70,7 +71,7 @@ class EmployeeHeaderCard extends StatelessWidget {
                       Icon(
                         isOffline ? Icons.wifi_off : Icons.wifi,
                         size: 13,
-                        color: isOffline ? Colors.orange.shade800 : Colors.green.shade800,
+                        color: isOffline ? AppColors.warningText : AppColors.successText,
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -79,8 +80,8 @@ class EmployeeHeaderCard extends StatelessWidget {
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: isOffline
-                              ? Colors.orange.shade800
-                              : Colors.green.shade800,
+                              ? AppColors.warningText
+                              : AppColors.successText,
                         ),
                       ),
                     ],

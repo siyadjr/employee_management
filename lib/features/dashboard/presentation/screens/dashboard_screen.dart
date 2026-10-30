@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/core/widgets/reviewer_settings_modal.dart';
 import 'package:employee_management/core/utils/location_service.dart';
 import 'package:employee_management/features/attendance/data/sync_repository.dart';
@@ -163,7 +164,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
     switch (_bannerState) {
       case _LocationBannerState.simulationActive:
-        color = Colors.blue;
+        color = AppColors.info;
         icon = Icons.science_rounded;
         final modeName = att.locationService.currentSimulationMode ==
                 LocationSimulationOption.atOffice
@@ -175,21 +176,21 @@ class _DashboardScreenState extends State<DashboardScreen>
         onAction = () => setState(() => _bannerState = _LocationBannerState.none);
         break;
       case _LocationBannerState.denied:
-        color = Colors.orange;
+        color = AppColors.warning;
         icon = Icons.location_off_rounded;
         message = 'Location permission denied. Tap Allow to grant access for check-in/out.';
         actionLabel = 'Allow';
         onAction = () => _requestLocationPermission(att.locationService);
         break;
       case _LocationBannerState.deniedForever:
-        color = Colors.red;
+        color = AppColors.error;
         icon = Icons.location_disabled_rounded;
         message = 'Location permanently denied. Open device Settings to enable it.';
         actionLabel = 'Settings';
         onAction = () => Geolocator.openAppSettings();
         break;
       case _LocationBannerState.serviceOff:
-        color = Colors.red;
+        color = AppColors.error;
         icon = Icons.gps_off_rounded;
         message = 'Location services are off on your device. Enable GPS to check in.';
         actionLabel = 'Enable GPS';
@@ -243,7 +244,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.cloud_off_rounded, size: 48, color: Colors.red),
+            const Icon(Icons.cloud_off_rounded, size: 48, color: AppColors.error),
             const SizedBox(height: 12),
             Text(dash.errorMessage ?? 'Unable to connect to server'),
             const SizedBox(height: 12),
@@ -319,17 +320,17 @@ class _DashboardScreenState extends State<DashboardScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.red.shade50,
+        color: AppColors.errorLight,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.red.shade200),
+        border: Border.all(color: AppColors.errorBorder),
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline, color: Colors.red, size: 18),
+          const Icon(Icons.error_outline, color: AppColors.error, size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(att.errorMessage!,
-                style: TextStyle(color: Colors.red.shade900, fontSize: 12)),
+                style: const TextStyle(color: AppColors.errorTextDark, fontSize: 12)),
           ),
           IconButton(
             icon: const Icon(Icons.close, size: 16),
@@ -350,9 +351,9 @@ class _DashboardScreenState extends State<DashboardScreen>
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildBalanceItem('Casual Leave', '${emp.casualLeaveBalance} days'),
-            Container(width: 1, height: 35, color: Colors.grey.shade300),
+            Container(width: 1, height: 35, color: AppColors.borderLight),
             _buildBalanceItem('Sick Leave', '${emp.sickLeaveBalance} days'),
-            Container(width: 1, height: 35, color: Colors.grey.shade300),
+            Container(width: 1, height: 35, color: AppColors.borderLight),
             _buildBalanceItem('Total Balance', '${emp.totalLeaveBalance} days'),
           ],
         ),
@@ -363,7 +364,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   Widget _buildBalanceItem(String label, String value) {
     return Column(
       children: [
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+        Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
         const SizedBox(height: 4),
         Text(value, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
       ],

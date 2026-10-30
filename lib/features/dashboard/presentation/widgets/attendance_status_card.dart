@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/features/attendance/presentation/providers/attendance_provider.dart';
 
 class AttendanceStatusCard extends StatelessWidget {
@@ -33,10 +34,10 @@ class AttendanceStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeFmt = DateFormat('hh:mm a');
     final statusColor = status == AttendanceStatus.checkedIn
-        ? Colors.green.shade600
+        ? AppColors.success
         : status == AttendanceStatus.checkedOut
-            ? Colors.blue.shade700
-            : Colors.grey.shade600;
+            ? AppColors.info
+            : AppColors.textSecondary;
 
     final statusText = status == AttendanceStatus.checkedIn
         ? 'Checked In'
@@ -104,7 +105,7 @@ class AttendanceStatusCard extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade700,
+                      backgroundColor: AppColors.success,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     onPressed: canCheckIn && !isActionInProgress ? onCheckIn : null,
@@ -112,7 +113,7 @@ class AttendanceStatusCard extends StatelessWidget {
                         ? const SizedBox(
                             width: 16,
                             height: 16,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
                           )
                         : const Icon(Icons.login_rounded, size: 18),
                     label: const Text('Check In'),
@@ -122,7 +123,7 @@ class AttendanceStatusCard extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade800,
+                      backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     onPressed: canCheckOut && !isActionInProgress ? onCheckOut : null,
@@ -130,7 +131,7 @@ class AttendanceStatusCard extends StatelessWidget {
                         ? const SizedBox(
                             width: 16,
                             height: 16,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
                           )
                         : const Icon(Icons.logout_rounded, size: 18),
                     label: const Text('Check Out'),
@@ -147,11 +148,11 @@ class AttendanceStatusCard extends StatelessWidget {
   Widget _buildTimeColumn(String label, String value, IconData icon) {
     return Column(
       children: [
-        Icon(icon, size: 20, color: Colors.grey.shade600),
+        Icon(icon, size: 20, color: AppColors.textSecondary),
         const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
         ),
         const SizedBox(height: 2),
         Text(

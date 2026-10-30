@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/features/dashboard/presentation/providers/dashboard_provider.dart';
 import 'package:employee_management/features/leave/presentation/providers/leave_provider.dart';
 import 'package:employee_management/features/leave/presentation/widgets/apply_leave_modal.dart';
@@ -54,13 +55,13 @@ class LeaveScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            const Icon(Icons.beach_access, color: Color(0xFF1E3A8A)),
+            const Icon(Icons.beach_access, color: AppColors.primary),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Available Total Balance', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  const Text('Available Total Balance', style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
                   Text('$balance Days Available', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 ],
               ),
@@ -75,15 +76,15 @@ class LeaveScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.red.shade50,
+        color: AppColors.errorLight,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.red.shade200),
+        border: Border.all(color: AppColors.errorBorder),
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline, color: Colors.red, size: 20),
+          const Icon(Icons.error_outline, color: AppColors.error, size: 20),
           const SizedBox(width: 8),
-          Expanded(child: Text(prov.errorMessage!, style: TextStyle(color: Colors.red.shade900, fontSize: 13))),
+          Expanded(child: Text(prov.errorMessage!, style: const TextStyle(color: AppColors.errorTextDark, fontSize: 13))),
           IconButton(icon: const Icon(Icons.close, size: 16), onPressed: () => prov.clearError()),
         ],
       ),

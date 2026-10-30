@@ -2,70 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:employee_management/core/network/mock_api_config.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/core/utils/location_service.dart';
 import 'package:employee_management/features/attendance/presentation/providers/attendance_provider.dart';
 import 'package:employee_management/features/settings/presentation/providers/workspace_config_provider.dart';
 
-class ConfigureScreen extends StatefulWidget {
+class ConfigureScreen extends StatelessWidget {
   const ConfigureScreen({super.key});
 
-  @override
-  State<ConfigureScreen> createState() => _ConfigureScreenState();
-}
+  static final _formKey = GlobalKey<FormState>();
+  static final _latController = TextEditingController();
+  static final _lngController = TextEditingController();
+  static final _radiusController = TextEditingController();
+  static bool _controllersInitialized = false;
 
-class _ConfigureScreenState extends State<ConfigureScreen> {
-  final _formKey = GlobalKey<FormState>();
-  late TextEditingController _latController;
-  late TextEditingController _lngController;
-  late TextEditingController _radiusController;
-  bool _isDetectingLocation = false;
+  void _syncControllersWithConfig(WorkspaceConfigProvider config) {
+    if (!_controllersInitialized || _latController.text.isEmpty) {
+      _latController.text = config.officeLatitude.toString();
+      _lngController.text = config.officeLongitude.toString();
+      _radiusController.text = config.geofenceRadius.toStringAsFixed(0);
+      _controllersInitialized = true;
+    }
+  }
 
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _useCurrentDeviceCoordinates(BuildContext context) async {
     final config = context.read<WorkspaceConfigProvider>();
-    _latController = TextEditingController(text: config.officeLatitude.toString());
-    _lngController = TextEditingController(text: config.officeLongitude.toString());
-    _radiusController = TextEditingController(text: config.geofenceRadius.toStringAsFixed(0));
-  }
-
-  @override
-  void dispose() {
-    _latController.dispose();
-    _lngController.dispose();
-    _radiusController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _useCurrentDeviceCoordinates() async {
-    setState(() => _isDetectingLocation = true);
+    config.setIsDetectingLocation(true);
     try {
       final perm = await Geolocator.checkPermission();
       if (perm == LocationPermission.denied) {
         await Geolocator.requestPermission();
       }
       final pos = await Geolocator.getCurrentPosition();
-      setState(() {
-        _latController.text = pos.latitude.toStringAsFixed(6);
-        _lngController.text = pos.longitude.toStringAsFixed(6);
-      });
-      if (mounted) {
+      _latController.text = pos.latitude.toStringAsFixed(6);
+      _lngController.text = pos.longitude.toStringAsFixed(6);
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Updated to your device current GPS coordinates!')),
         );
       }
     } catch (e) {
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Could not fetch current location: $e')),
         );
       }
     } finally {
-      if (mounted) setState(() => _isDetectingLocation = false);
+      config.setIsDetectingLocation(false);
     }
   }
 
-  Future<void> _saveLocationConfig() async {
+  Future<void> _saveLocationConfig(BuildContext context) async {
     if (!_formKey.currentState!.validate()) return;
 
     final lat = double.parse(_latController.text.trim());
@@ -80,11 +67,11 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
     );
 
     // Refresh attendance provider to recalculate distance against new office
-    if (mounted) {
+    if (context.mounted) {
       await context.read<AttendanceProvider>().refreshLocation();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          backgroundColor: Colors.teal,
+          backgroundColor: AppColors.teal,
           content: Text('Office location & geofence updated across the app!'),
         ),
       );
@@ -96,6 +83,8 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
     final config = context.watch<WorkspaceConfigProvider>();
     final att = context.watch<AttendanceProvider>();
     final currentSimMode = att.locationService.currentSimulationMode;
+
+    _syncControllersWithConfig(config);
 
     return Scaffold(
       appBar: AppBar(
@@ -145,7 +134,7 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.location_on_rounded, color: Colors.indigo),
+                  const Icon(Icons.location_on_rounded, color: AppColors.indigo),
                   const SizedBox(width: 8),
                   const Expanded(
                     child: Text(
@@ -153,7 +142,7 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ),
-                  if (_isDetectingLocation)
+                  if (config.isDetectingLocation)
                     const SizedBox(
                       width: 18,
                       height: 18,
@@ -163,14 +152,14 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
                     IconButton(
                       icon: const Icon(Icons.my_location, size: 20),
                       tooltip: 'Use My Current GPS',
-                      onPressed: _useCurrentDeviceCoordinates,
+                      onPressed: () => _useCurrentDeviceCoordinates(context),
                     ),
                 ],
               ),
               const SizedBox(height: 4),
-              Text(
+              const Text(
                 'Change office coordinates to test geofencing anywhere in the world.',
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
               ),
               const Divider(height: 20),
               Row(
@@ -233,7 +222,7 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
-                  onPressed: _saveLocationConfig,
+                  onPressed: () => _saveLocationConfig(context),
                   icon: const Icon(Icons.check, size: 18),
                   label: const Text('Save & Apply Location'),
                 ),
@@ -254,7 +243,7 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
           children: [
             const Row(
               children: [
-                Icon(Icons.access_time_filled_rounded, color: Colors.deepPurple),
+                Icon(Icons.access_time_filled_rounded, color: AppColors.deepPurple),
                 SizedBox(width: 8),
                 Text(
                   'Office Working Hours',
@@ -263,9 +252,9 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
               ],
             ),
             const SizedBox(height: 4),
-            Text(
+            const Text(
               'Company shift start and end times for daily work duration calculation.',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
             ),
             const Divider(height: 20),
             Row(
@@ -338,7 +327,7 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
           children: [
             const Row(
               children: [
-                Icon(Icons.satellite_alt_rounded, color: Colors.teal),
+                Icon(Icons.satellite_alt_rounded, color: AppColors.teal),
                 SizedBox(width: 8),
                 Text(
                   'Simulation Testing Mode',
@@ -347,9 +336,9 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
               ],
             ),
             const SizedBox(height: 4),
-            Text(
+            const Text(
               'Quickly simulate being inside or outside the configured office location.',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
             ),
             const Divider(height: 20),
             RadioListTile<LocationSimulationOption>(
@@ -361,7 +350,6 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
                 if (opt != null) {
                   await att.locationService.setSimulationMode(opt);
                   await att.refreshLocation();
-                  setState(() {});
                 }
               },
             ),
@@ -374,7 +362,6 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
                 if (opt != null) {
                   await att.locationService.setSimulationMode(opt);
                   await att.refreshLocation();
-                  setState(() {});
                 }
               },
             ),
@@ -387,7 +374,6 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
                 if (opt != null) {
                   await att.locationService.setSimulationMode(opt);
                   await att.refreshLocation();
-                  setState(() {});
                 }
               },
             ),
@@ -406,7 +392,7 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
           children: [
             const Row(
               children: [
-                Icon(Icons.wifi_tethering_rounded, color: Colors.orange),
+                Icon(Icons.wifi_tethering_rounded, color: AppColors.orange),
                 SizedBox(width: 8),
                 Text(
                   'Mock API Network Condition',
@@ -415,9 +401,9 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
               ],
             ),
             const SizedBox(height: 4),
-            Text(
+            const Text(
               'Simulate backend faults to test offline queue & error resiliency.',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
             ),
             const Divider(height: 20),
             ValueListenableBuilder<MockNetworkScenario>(
@@ -433,7 +419,7 @@ class _ConfigureScreenState extends State<ConfigureScreen> {
                       ),
                       subtitle: Text(
                         MockApiConfig.getScenarioDescription(sc),
-                        style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                        style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                       ),
                       value: sc,
                       groupValue: activeScenario,

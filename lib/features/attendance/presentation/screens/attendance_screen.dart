@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/core/widgets/reviewer_settings_modal.dart';
 import 'package:employee_management/features/attendance/data/sync_repository.dart';
 import 'package:employee_management/features/attendance/presentation/providers/attendance_provider.dart';
@@ -52,19 +53,18 @@ class AttendanceScreen extends StatelessWidget {
   }
 
   Widget _buildOfficeShiftBanner(BuildContext context) {
-    final storage = context.watch<AttendanceProvider>().locationService;
     // Read workspace config
     final configProv = context.watch<WorkspaceConfigProvider>();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.indigo.shade50,
+        color: AppColors.infoLight,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.indigo.shade100),
+        border: Border.all(color: AppColors.borderLight),
       ),
       child: Row(
         children: [
-          Icon(Icons.schedule_rounded, color: Colors.indigo.shade700, size: 20),
+          const Icon(Icons.schedule_rounded, color: AppColors.primary, size: 20),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -72,15 +72,15 @@ class AttendanceScreen extends StatelessWidget {
               children: [
                 Text(
                   'Configured Shift: ${configProv.startTimeFormatted} — ${configProv.endTimeFormatted}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
-                    color: Colors.indigo.shade900,
+                    color: AppColors.primaryDark,
                   ),
                 ),
                 Text(
                   'HQ: ${configProv.officeLatitude.toStringAsFixed(4)}, ${configProv.officeLongitude.toStringAsFixed(4)} (Radius: ${configProv.geofenceRadius.toStringAsFixed(0)}m)',
-                  style: TextStyle(fontSize: 11, color: Colors.indigo.shade700),
+                  style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                 ),
               ],
             ),
@@ -94,18 +94,18 @@ class AttendanceScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.red.shade50,
+        color: AppColors.errorLight,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.red.shade200),
+        border: Border.all(color: AppColors.errorBorder),
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline, color: Colors.red, size: 20),
+          const Icon(Icons.error_outline, color: AppColors.error, size: 20),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               att.errorMessage!,
-              style: TextStyle(color: Colors.red.shade900, fontSize: 13),
+              style: const TextStyle(color: AppColors.errorTextDark, fontSize: 13),
             ),
           ),
           IconButton(
@@ -143,14 +143,14 @@ class AttendanceScreen extends StatelessWidget {
                       ? 'You are currently checked in. Tap Check-Out to complete.'
                       : 'You have already checked out for today.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+              style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
             ),
             if (att.checkInTime != null) ...[
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
+                  color: AppColors.grey100,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -158,7 +158,7 @@ class AttendanceScreen extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        const Text('Check-In Time', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                        const Text('Check-In Time', style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
                         const SizedBox(height: 2),
                         Text(
                           '${att.checkInTime!.hour.toString().padLeft(2, '0')}:${att.checkInTime!.minute.toString().padLeft(2, '0')}',
@@ -166,10 +166,10 @@ class AttendanceScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Container(height: 24, width: 1, color: Colors.grey.shade300),
+                    Container(height: 24, width: 1, color: AppColors.borderLight),
                     Column(
                       children: [
-                        const Text('Working Duration', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                        const Text('Working Duration', style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
                         const SizedBox(height: 2),
                         Text(
                           _formatDuration(att.workingDuration),
@@ -177,8 +177,8 @@ class AttendanceScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: att.todayStatus == AttendanceStatus.checkedIn
-                                ? Colors.green.shade700
-                                : Colors.blue.shade700,
+                                ? AppColors.success
+                                : AppColors.info,
                           ),
                         ),
                       ],
@@ -193,7 +193,7 @@ class AttendanceScreen extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade700,
+                      backgroundColor: AppColors.success,
                     ),
                     onPressed: canCheckIn && !att.isActionInProgress
                         ? () async {
@@ -209,7 +209,7 @@ class AttendanceScreen extends StatelessWidget {
                         ? const SizedBox(
                             width: 16,
                             height: 16,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
                           )
                         : const Icon(Icons.login),
                     label: const Text('Check In'),
@@ -219,7 +219,7 @@ class AttendanceScreen extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade800,
+                      backgroundColor: AppColors.primary,
                     ),
                     onPressed: canCheckOut && !att.isActionInProgress
                         ? () async {
@@ -235,7 +235,7 @@ class AttendanceScreen extends StatelessWidget {
                         ? const SizedBox(
                             width: 16,
                             height: 16,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
                           )
                         : const Icon(Icons.logout),
                     label: const Text('Check Out'),
@@ -266,16 +266,16 @@ class AttendanceScreen extends StatelessWidget {
                 Text(
                   '${sync.pendingCount} pending',
                   style: TextStyle(
-                    color: sync.pendingCount > 0 ? Colors.amber.shade900 : Colors.green,
+                    color: sync.pendingCount > 0 ? AppColors.warningTextDark : AppColors.success,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Actions logged while offline survive app close/restarts and sync automatically.',
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
             ),
           ],
         ),

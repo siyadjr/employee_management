@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/core/utils/location_service.dart';
 
 class LocationGeofenceCard extends StatelessWidget {
@@ -31,7 +32,7 @@ class LocationGeofenceCard extends StatelessWidget {
                   children: [
                     Icon(
                       isWithin ? Icons.check_circle : Icons.warning_rounded,
-                      color: isWithin ? Colors.green : Colors.red,
+                      color: isWithin ? AppColors.success : AppColors.error,
                       size: 20,
                     ),
                     const SizedBox(width: 8),
@@ -39,7 +40,7 @@ class LocationGeofenceCard extends StatelessWidget {
                       isWithin ? 'Within Office Geofence' : 'Outside Office Geofence',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: isWithin ? Colors.green.shade800 : Colors.red.shade800,
+                        color: isWithin ? AppColors.successText : AppColors.errorText,
                       ),
                     ),
                   ],
@@ -54,12 +55,12 @@ class LocationGeofenceCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               'Distance to HQ: ${dist.toStringAsFixed(1)}m (Max allowed: 200m)',
-              style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+              style: const TextStyle(fontSize: 13, color: AppColors.grey700),
             ),
             const SizedBox(height: 4),
             Text(
               'Mode: ${_modeName(mode)}',
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+              style: const TextStyle(fontSize: 12, color: AppColors.grey500),
             ),
           ],
         ),

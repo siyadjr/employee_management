@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/features/attendance/domain/models/attendance_event.dart';
 
 class RecentAttendanceList extends StatelessWidget {
@@ -16,7 +17,7 @@ class RecentAttendanceList extends StatelessWidget {
           child: Center(
             child: Text(
               'No recent attendance records found.',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: AppColors.textMuted),
             ),
           ),
         ),
@@ -44,8 +45,8 @@ class RecentAttendanceList extends StatelessWidget {
             dense: true,
             leading: const CircleAvatar(
               radius: 16,
-              backgroundColor: Color(0xFFF1F5F9),
-              child: Icon(Icons.calendar_today, size: 14, color: Color(0xFF1E3A8A)),
+              backgroundColor: AppColors.grey100,
+              child: Icon(Icons.calendar_today, size: 14, color: AppColors.primary),
             ),
             title: Text(
               record.date,
@@ -66,18 +67,18 @@ class RecentAttendanceList extends StatelessWidget {
 
     switch (status) {
       case SyncStatus.synced:
-        bg = Colors.green.shade50;
-        fg = Colors.green.shade800;
+        bg = AppColors.successLight;
+        fg = AppColors.successText;
         text = 'Synced';
         break;
       case SyncStatus.pending:
-        bg = Colors.amber.shade50;
-        fg = Colors.amber.shade900;
+        bg = AppColors.warningLight;
+        fg = AppColors.warningTextDark;
         text = 'Pending';
         break;
       case SyncStatus.rejected:
-        bg = Colors.red.shade50;
-        fg = Colors.red.shade800;
+        bg = AppColors.errorLight;
+        fg = AppColors.errorText;
         text = 'Rejected';
         break;
     }

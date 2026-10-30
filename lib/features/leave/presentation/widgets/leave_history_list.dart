@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/features/leave/domain/models/leave_request.dart';
 
 class LeaveHistoryList extends StatelessWidget {
@@ -16,7 +17,7 @@ class LeaveHistoryList extends StatelessWidget {
           child: Center(
             child: Text(
               'No leave requests found.',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: AppColors.textMuted),
             ),
           ),
         ),
@@ -52,7 +53,7 @@ class LeaveHistoryList extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text(dates, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+                Text(dates, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                 const SizedBox(height: 6),
                 Text(
                   req.reason,
@@ -71,16 +72,16 @@ class LeaveHistoryList extends StatelessWidget {
     Color fg;
     switch (status) {
       case LeaveStatus.approved:
-        bg = Colors.green.shade50;
-        fg = Colors.green.shade800;
+        bg = AppColors.successLight;
+        fg = AppColors.successText;
         break;
       case LeaveStatus.pending:
-        bg = Colors.amber.shade50;
-        fg = Colors.amber.shade900;
+        bg = AppColors.warningLight;
+        fg = AppColors.warningTextDark;
         break;
       case LeaveStatus.rejected:
-        bg = Colors.red.shade50;
-        fg = Colors.red.shade800;
+        bg = AppColors.errorLight;
+        fg = AppColors.errorText;
         break;
     }
 

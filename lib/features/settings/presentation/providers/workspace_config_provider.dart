@@ -10,9 +10,16 @@ class WorkspaceConfigProvider extends ChangeNotifier {
   double _geofenceRadius = AppConstants.maxAllowedGeofenceRadiusMeters;
   TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
   TimeOfDay _endTime = const TimeOfDay(hour: 18, minute: 0);
+  bool _isDetectingLocation = false;
 
   WorkspaceConfigProvider(this._storage) {
     _loadConfig();
+  }
+
+  bool get isDetectingLocation => _isDetectingLocation;
+  void setIsDetectingLocation(bool value) {
+    _isDetectingLocation = value;
+    notifyListeners();
   }
 
   double get officeLatitude => _officeLatitude;

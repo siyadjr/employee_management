@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/core/utils/location_service.dart';
 
 class DashboardGeofenceStatusCard extends StatelessWidget {
@@ -42,8 +43,8 @@ class DashboardGeofenceStatusCard extends StatelessWidget {
                             ? Icons.location_on_rounded
                             : Icons.location_off_rounded,
                         color: isWithin
-                            ? Colors.green.shade700
-                            : Colors.red.shade700,
+                            ? AppColors.success
+                            : AppColors.error,
                         size: 20,
                       ),
                       const SizedBox(width: 8),
@@ -57,8 +58,8 @@ class DashboardGeofenceStatusCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                             color: isWithin
-                                ? Colors.green.shade900
-                                : Colors.red.shade900,
+                                ? AppColors.successTextDark
+                                : AppColors.errorTextDark,
                           ),
                         ),
                       ),
@@ -100,15 +101,15 @@ class DashboardGeofenceStatusCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               'Office: 10.028282, 76.336596 • Distance: ${dist < 0 ? 'Unknown' : '${dist.toStringAsFixed(1)}m'}',
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+              style: const TextStyle(fontSize: 12, color: AppColors.grey700),
             ),
             if (error != null) ...[
               const SizedBox(height: 4),
               Text(
                 error,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 11,
-                  color: Colors.red.shade700,
+                  color: AppColors.errorText,
                   fontWeight: FontWeight.w500,
                 ),
               ),

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'package:employee_management/core/theme/app_colors.dart';
+
 class AppTheme {
-  static const Color primaryColor = Color(0xFF1E3A8A); // Deep Slate Blue
-  static const Color accentColor = Color(0xFF0284C7); // Vibrant Sky Blue
-  static const Color successColor = Color(0xFF059669); // Forest Emerald
-  static const Color warningColor = Color(0xFFD97706); // Amber
-  static const Color errorColor = Color(0xFFDC2626); // Crimson
-  static const Color surfaceColor = Color(0xFFF8FAFC);
-  static const Color cardColor = Colors.white;
+  static const Color primaryColor = AppColors.primary;
+  static const Color accentColor = AppColors.accent;
+  static const Color successColor = AppColors.success;
+  static const Color warningColor = AppColors.warning;
+  static const Color errorColor = AppColors.error;
+  static const Color surfaceColor = AppColors.surface;
+  static const Color cardColor = AppColors.card;
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -21,12 +23,12 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: surfaceColor,
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
-        foregroundColor: Color(0xFF0F172A),
+        backgroundColor: AppColors.white,
+        foregroundColor: AppColors.textPrimary,
         elevation: 0,
         centerTitle: false,
         titleTextStyle: TextStyle(
-          color: Color(0xFF0F172A),
+          color: AppColors.textPrimary,
           fontSize: 18,
           fontWeight: FontWeight.w700,
         ),
@@ -34,7 +36,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: cardColor,
         elevation: 1.5,
-        shadowColor: Colors.black.withValues(alpha: 0.05),
+        shadowColor: AppColors.black.withValues(alpha: 0.05),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
         ),
@@ -42,7 +44,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

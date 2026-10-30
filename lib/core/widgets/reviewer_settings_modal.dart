@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:employee_management/core/network/mock_api_config.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/core/utils/location_service.dart';
 import 'package:employee_management/features/attendance/presentation/providers/attendance_provider.dart';
 
@@ -44,7 +45,7 @@ class _ReviewerSettingsModalState extends State<ReviewerSettingsModal> {
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.check_circle_rounded, color: Colors.greenAccent, size: 18),
+                const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 18),
                 const SizedBox(width: 8),
                 Expanded(child: Text('Location updated to $modeName')),
               ],
@@ -69,7 +70,7 @@ class _ReviewerSettingsModalState extends State<ReviewerSettingsModal> {
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.wifi_tethering_rounded, color: Colors.lightBlueAccent, size: 18),
+            const Icon(Icons.wifi_tethering_rounded, color: AppColors.accent, size: 18),
             const SizedBox(width: 8),
             Expanded(child: Text('Network simulated: ${scenario.name}')),
           ],
@@ -96,7 +97,7 @@ class _ReviewerSettingsModalState extends State<ReviewerSettingsModal> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: AppColors.borderLight,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -105,18 +106,18 @@ class _ReviewerSettingsModalState extends State<ReviewerSettingsModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Reviewer Controls',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       'Toggle GPS & mock API conditions',
-                      style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                      style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
                     ),
                   ],
                 ),
@@ -219,7 +220,7 @@ class _ReviewerSettingsModalState extends State<ReviewerSettingsModal> {
                   const SizedBox(height: 6),
                   Text(
                     MockApiConfig.getScenarioDescription(activeScenario),
-                    style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
                   ),
                 ],
               );

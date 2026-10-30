@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:employee_management/core/theme/app_colors.dart';
 import 'package:employee_management/features/leave/domain/models/leave_request.dart';
 import 'package:employee_management/features/leave/presentation/providers/leave_provider.dart';
 
@@ -126,7 +127,7 @@ class _ApplyLeaveModalState extends State<ApplyLeaveModal> {
             ),
             Text(
               'Total Days: $days (Balance available: ${widget.availableBalance})',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -160,7 +161,7 @@ class _ApplyLeaveModalState extends State<ApplyLeaveModal> {
                         } else if (!ok && context.mounted && leaveProv.errorMessage != null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              backgroundColor: Colors.red.shade800,
+                              backgroundColor: AppColors.errorText,
                               content: Text(leaveProv.errorMessage!),
                             ),
                           );
@@ -170,7 +171,7 @@ class _ApplyLeaveModalState extends State<ApplyLeaveModal> {
                     ? const SizedBox(
                         width: 18,
                         height: 18,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
                       )
                     : const Text('Submit Application'),
               ),
